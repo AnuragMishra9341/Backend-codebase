@@ -6,7 +6,25 @@ import connectDB from "./db/index.js";
 dotenv.config({
    path:'./env'
 })
-connectDB();
+
+// since connectDB is an asynchronous type function it will always return a res if we 
+// do not have explicityly return it 
+// the res sent will be undefined
+connectDB()
+.then((res)=>{
+
+   app.on("error",(error)=>{
+        console.log(' Server error ',error);
+        throw error;
+      })
+
+   app.listen(process.env.PORT || 8000,()=>{
+       console.log(`Server is running at port : ${process.env.PORT}`)
+   })
+})
+.catch((error)=>{
+   console.log('MongoDb connection failed !!',err)
+})
 
 
 
